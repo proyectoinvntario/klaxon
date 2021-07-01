@@ -30,6 +30,8 @@ gem 'kramdown'
 
 gem 'aws-sdk-sqs', '~> 1.30'
 
+gem 'sendgrid-ruby'
+
 group :development, :test do
   gem 'byebug'
   gem 'rspec-rails'
