@@ -26,6 +26,9 @@ class UserMailer < ApplicationMailer
     uri = URI.parse("https://api.sendgrid.com/v3/mail/send")
     request = Net::HTTP::Post.new(uri)
     request.content_type = "application/json"
+    puts "SENDGRID: request " + @user.email
+    puts "SENDGRID: request " + ENV['SENDGRID_API_KEY']
+    puts "SENDGRID: request " + @url 
     request["Authorization"] = "Bearer <" + ENV['SENDGRID_API_KEY'] + ">"
     request.body = JSON.dump({
       "personalizations" => [
@@ -63,8 +66,8 @@ class UserMailer < ApplicationMailer
       http.request(request)
     end
 
-    puts response.code
-    puts response.body
+    puts "SENDGRID: response " + response.code
+    puts "SENDGRID: response " + response.body
   end
 
   def welcome_email(user: nil, invited_by: nil)
