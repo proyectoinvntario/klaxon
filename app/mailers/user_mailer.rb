@@ -26,7 +26,7 @@ class UserMailer < ApplicationMailer
     uri = URI.parse("https://api.sendgrid.com/v3/mail/send")
     request = Net::HTTP::Post.new(uri)
     request.content_type = "application/json"
-    request["Authorization"] = "Bearer <9288bc564e202b9e4e51f4b8723e631bd50e54613a6f052c61365b8634f1dd56>"
+    request["Authorization"] = "Bearer <" + ENV['SENDGRID_API_KEY'] + ">"
     request.body = JSON.dump({
       "personalizations" => [
         {
