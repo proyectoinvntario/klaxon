@@ -1,5 +1,8 @@
-require 'sendgrid-ruby'
-include SendGrid
+# require 'sendgrid-ruby'
+# include SendGrid
+require 'net/http'
+require 'uri'
+require 'json'
 
 class UserMailer < ApplicationMailer
   layout 'user_mailer'
@@ -9,16 +12,57 @@ class UserMailer < ApplicationMailer
     @url = token_session_url(token: token)
     @user = user
 
-    from = SendGrid::Email.new(email: 'no-reply@newsklaxon.org')
-    to = SendGrid::Email.new(@user.email)
-    subject = 'Log in to Klaxon'
-    content = SendGrid::Content.new(type: 'text/plain', value: @url)
-    mail = SendGrid::Mail.new(from, subject, to, content)
+    # from = SendGrid::Email.new(email: 'no-reply@newsklaxon.org')
+    # to = SendGrid::Email.new(@user.email)
+    # subject = 'Log in to Klaxon'
+    # content = SendGrid::Content.new(type: 'text/plain', value: @url)
+    # mail = SendGrid::Mail.new(from, subject, to, content)
 
-    sg = SendGrid::API.new(api_key: ENV['SENDGRID_API_KEY'])
-    response = sg.client.mail._('send').post(request_body: mail.to_json)
+    # sg = SendGrid::API.new(api_key: ENV['SENDGRID_API_KEY'])
+    # response = sg.client.mail._('send').post(request_body: mail.to_json)
 
     # mail(to: @user.email, subject: 'Log in to Klaxon')
+
+    uri = URI.parse("https://api.sendgrid.com/v3/mail/send")
+    request = Net::HTTP::Post.new(uri)
+    request.content_type = "application/json"
+    request["Authorization"] = "Bearer <9288bc564e202b9e4e51f4b8723e631bd50e54613a6f052c61365b8634f1dd56>"
+    request.body = JSON.dump({
+      "personalizations" => [
+        {
+          "to" => [
+            {
+              "email" => @user.email,
+              "name" => ""
+            }
+          ],
+          "subject" => "Log in to Klaxon"
+        }
+      ],
+      "content" => [
+        {
+          "type" => "text/plain",
+          "value" => @url
+        }
+      ],
+      "from" => {
+        "email" => "no-reply@newsklaxon.org",
+        "name" => "Klaxon"
+      },
+      "reply_to" => {
+        "email" => "no-reply@newsklaxon.org",
+        "name" => "Klaxon"
+      }
+    })
+
+    req_options = {
+      use_ssl: uri.scheme == "https",
+    }
+
+    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+      http.request(request)
+    end
+
   end
 
   def welcome_email(user: nil, invited_by: nil)
