@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby '2.7.3'
 
 gem 'rails', '~> 6.0'
-gem 'pg', '~> 1.1'
+gem 'pg', '~> 0.21'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'therubyracer'
@@ -29,7 +29,6 @@ gem 'diffy'
 gem 'kramdown'
 
 gem 'aws-sdk-sqs', '~> 1.30'
-
 gem 'sendgrid-ruby'
 
 group :development, :test do
