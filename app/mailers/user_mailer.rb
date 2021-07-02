@@ -63,6 +63,8 @@ class UserMailer < ApplicationMailer
       http.request(request)
     end
 
+    puts response.code
+    puts response.body
   end
 
   def welcome_email(user: nil, invited_by: nil)
