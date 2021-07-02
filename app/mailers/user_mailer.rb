@@ -26,7 +26,7 @@ class UserMailer < ApplicationMailer
     uri = URI.parse("https://api.sendgrid.com/v3/mail/send")
     request = Net::HTTP::Post.new(uri)
     request.content_type = "application/json"
-    request["Authorization"] = "Bearer <" + ENV['SENDGRID_API_KEY'] + ">"
+    request["Authorization"] = "Bearer " + ENV['SENDGRID_API_KEY']
     request.body = JSON.dump({
       "personalizations" => [
         {
@@ -62,7 +62,7 @@ class UserMailer < ApplicationMailer
     response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
       http.request(request)
     end
-    
+
     puts "SENDGRID: request " + @user.email
     puts "SENDGRID: request " + ENV['SENDGRID_API_KEY']
     puts "SENDGRID: request " + @url 
