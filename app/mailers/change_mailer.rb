@@ -7,7 +7,7 @@ class ChangeMailer < ApplicationMailer
     @change = change
     @page = @change.after.page
     @user = user
-    @content "Something Changed \n" + @page.name + " changed. It has changed " + @page.num_changes + " times since Klaxon started monitoring it on " + @page.created_at.strftime("%A, %B %d, %Y") + "\n View Source Page: " + @page.url + "\n"
+    @content = "Something Changed \n" + @page.name + " changed. It has changed " + @page.num_changes + " times since Klaxon started monitoring it on " + @page.created_at.strftime("%A, %B %d, %Y") + "\n View Source Page: " + @page.url + "\n"
     @content = @content + Diffy::Diff.new(@change.before.match_text, @change.after.match_text, context: 2).to_s()
        
     uri = URI.parse("https://api.sendgrid.com/v3/mail/send")
